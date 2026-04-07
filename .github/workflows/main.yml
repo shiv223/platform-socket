@@ -3,7 +3,7 @@ name: Deploy Socket App to EC2
 on:
   push:
     branches:
-      - master
+      - notusingnow
 
 jobs:
   deploy:

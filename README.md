@@ -171,3 +171,21 @@ Fastest fix: set `SQS_QUEUE_URL` explicitly.
 - Without Redis adapter, each instance manages local rooms only.
 - With `REDIS_URL`, Socket.IO adapter synchronizes rooms/events across instances.
 - Keep this service stateless and rely on backend DB/API for source of truth.
+
+
+## Manual deployment
+  - docker build -t socket-app:latest .
+  - docker save -o socket-app.tar socket-app:latest
+  - scp -i demoplatform.pem ./platform-socket/socket-app.tar ec2-user@35.90.119.174:/home/ec2-user/
+  - scp -i demoplatform.pem .env ec2-user@35.90.119.174:/home/ec2-user/.env
+  - ssh -i demoplatform.pem ec2-user@35.90.119.174
+  - docker load -i /home/ec2-user/socket-app.tar
+  -   docker stop socket-app || true
+      docker rm socket-app || true
+      docker run -d \
+        --name socket-app \
+        -p 8090:8090 \
+        --env-file .env \
+        socket-app
+  -  docker ps
+  -  docker logs -f --tail 200 socket-app      
